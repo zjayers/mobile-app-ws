@@ -1,0 +1,15 @@
+spring:
+
+  # Application
+  application:
+    name: mobile-application-service
+
+  # Security
+  security:
+    user:
+      name: spring
+      password: boot
+
+  # Active Profile
+  profiles:
+    active: dev

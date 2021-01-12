@@ -1,0 +1,10 @@
+spring:
+  # Datasource
+  datasource:
+    url: jdbc:h2:mem:photo_app
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
