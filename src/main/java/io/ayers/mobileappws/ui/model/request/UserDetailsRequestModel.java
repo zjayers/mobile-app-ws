@@ -1,10 +1,8 @@
 package io.ayers.mobileappws.ui.model.request;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class UserDetailsRequestModel {
 
     private String firstName;

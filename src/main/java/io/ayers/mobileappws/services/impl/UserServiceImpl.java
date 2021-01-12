@@ -6,11 +6,13 @@ import io.ayers.mobileappws.repository.UserRepository;
 import io.ayers.mobileappws.services.UserService;
 import io.ayers.mobileappws.shared.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -44,8 +46,27 @@ public class UserServiceImpl
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO
-        return null;
+    public UserDto getUserDetailsByEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+        return userMapper.domainEntityToDto(userEntity);
+    }
+
+    @Override
+    public UserDto getUserDetailsByUserId(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        return userMapper.domainEntityToDto(userEntity);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) throw new UsernameNotFoundException(email);
+
+        return new User(
+                userEntity.getEmail(),
+                userEntity.getEncryptedPassword(),
+                new ArrayList<>());
+
     }
 }

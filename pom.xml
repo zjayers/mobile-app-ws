@@ -16,14 +16,20 @@
 
     <properties>
         <java.version>11</java.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <lombok.binding.version>0.1.0</lombok.binding.version>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <org.projectlombok.version>1.18.16</org.projectlombok.version>
-        <jjwt.version>0.9.1</jjwt.version>
-        <lombok.binding.version>0.1.0</lombok.binding.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

@@ -7,11 +7,15 @@ import io.ayers.mobileappws.ui.model.request.UserDetailsRequestModel;
 import io.ayers.mobileappws.ui.model.response.UserDetailsResponseModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(
+        path = "/users",
+        consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 @RequiredArgsConstructor
 public class UsersController {
 
@@ -24,10 +28,14 @@ public class UsersController {
                              .body("Get all was called");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<String> getOne(@PathVariable(name = "id") String id) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDetailsResponseModel> getOne(@PathVariable(name = "userId") String userId) {
+
+        UserDto userDto = userService.getUserDetailsByUserId(userId);
+        UserDetailsResponseModel userDetailsResponseModel = userMapper.dtoToResponseModel(userDto);
+
         return ResponseEntity.status(HttpStatus.OK)
-                             .body(String.format("Get one was called with id: '%s'", id));
+                             .body(userDetailsResponseModel);
     }
 
     @PostMapping
