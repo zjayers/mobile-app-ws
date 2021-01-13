@@ -7,6 +7,8 @@ import io.ayers.mobileappws.ui.model.response.UserDetailsResponseModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Collection;
+
 @Mapper
 public interface UserMapper {
 
@@ -26,8 +28,12 @@ public interface UserMapper {
     @Mapping(target = "password", ignore = true)
     UserDto domainEntityToDto(UserEntity userEntity);
 
+    Collection<UserDto> domainEntityToDto(Collection<UserEntity> userEntity);
+
     // Step 4: DTO to Response Model
     UserDetailsResponseModel dtoToResponseModel(UserDto userDto);
+
+    Collection<UserDetailsResponseModel> dtoToResponseModel(Collection<UserDto> userDto);
 
 
 }
