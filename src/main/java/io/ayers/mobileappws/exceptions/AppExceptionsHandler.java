@@ -20,12 +20,12 @@ public class AppExceptionsHandler {
                                                .build());
     }
 
-    @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<ErrorMessage> handleException(Exception exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body(ErrorMessage.builder()
-                                               .message(exception.getMessage())
-                                               .timestamp(new Date())
-                                               .build());
-    }
+//    @ExceptionHandler(value = {Exception.class})
+//    public ResponseEntity<ErrorMessage> handleException(Exception exception) {
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                             .body(ErrorMessage.builder()
+//                                               .message(exception.getMessage())
+//                                               .timestamp(new Date())
+//                                               .build());
+//    }
 }

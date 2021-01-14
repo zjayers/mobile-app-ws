@@ -2,8 +2,10 @@ package io.ayers.mobileappws.ui.controller;
 
 import io.ayers.mobileappws.mapping.UserMapper;
 import io.ayers.mobileappws.services.UserService;
+import io.ayers.mobileappws.shared.AddressDto;
 import io.ayers.mobileappws.shared.UserDto;
 import io.ayers.mobileappws.ui.model.request.UserDetailsRequestModel;
+import io.ayers.mobileappws.ui.model.response.AddressResponseModel;
 import io.ayers.mobileappws.ui.model.response.OperationStatusModel;
 import io.ayers.mobileappws.ui.model.response.UserDetailsResponseModel;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping(
@@ -44,6 +47,19 @@ public class UsersController {
 
         return ResponseEntity.status(HttpStatus.OK)
                              .body(userDetailsResponseModel);
+    }
+
+    @GetMapping("/{userId}/addresses")
+    public ResponseEntity<Collection<AddressResponseModel>> getOne_Addresses(
+            @PathVariable(name = "userId") String userId
+    ) {
+
+        UserDto userDto = userService.getUserDetailsByUserId(userId);
+
+        List<AddressDto> addressDtos = userDto.getAddresses();
+        List<AddressResponseModel> addressResponseModels = userMapper.addressDtoToResponse(addressDtos);
+
+        return ResponseEntity.status(HttpStatus.OK).body(addressResponseModels);
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +36,8 @@ public class UserServiceImpl
 
         UserEntity userEntity = userMapper.dtoToDomainEntity(userDto);
 
-        String generatedUserId = UUID.randomUUID().toString();
         String encodedPassword = bCryptPasswordEncoder.encode(userDto.getPassword());
 
-        userEntity.setUserId(generatedUserId);
         userEntity.setEncryptedPassword(encodedPassword);
 
         UserEntity savedUserEntity = userRepository.save(userEntity);

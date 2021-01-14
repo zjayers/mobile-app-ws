@@ -2,6 +2,8 @@ package io.ayers.mobileappws.ui.model.request;
 
 import lombok.Data;
 
+import java.util.Collection;
+
 @Data
 public class UserDetailsRequestModel {
 
@@ -9,4 +11,5 @@ public class UserDetailsRequestModel {
     private String lastName;
     private String password;
     private String email;
+    private Collection<AddressRequestModel> addresses;
 }
