@@ -48,7 +48,9 @@ public interface UserMapper {
     AddressDto addressEntityToDto(AddressEntity addressEntity);
 
     @Mapping(target = "userDetails", ignore = true)
-    List<AddressResponseModel> addressDtoToResponse(List<AddressDto> addressDto);
+    List<AddressResponseModel> addressDtoToResponse(Collection<AddressDto> addressDto);
+
+    AddressResponseModel addressDtoToResponse(AddressDto addressDto);
 
     @Named("addressWithoutUsers")
     default List<AddressDto> addressEntityListToDtoList(List<AddressEntity> addressEntities) {
