@@ -26,6 +26,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-ses</artifactId>
+            <version>1.11.935</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
@@ -77,10 +82,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

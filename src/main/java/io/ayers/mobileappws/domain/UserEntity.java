@@ -1,10 +1,14 @@
 package io.ayers.mobileappws.domain;
 
+import io.ayers.mobileappws.config.constants.SecurityConstants;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,12 +48,19 @@ public class UserEntity
     @Builder.Default
     private Boolean emailVerificationStatus = false;
 
-    private String emailVerificationToken;
+    @Builder.Default
+    private String emailVerificationToken = Jwts.builder()
+                                                .setSubject($default$userId())
+                                                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                                                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
+                                                .compact();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_address",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id"))
+
     @Builder.Default
     private List<AddressEntity> addresses = new ArrayList<>();
+
 }

@@ -12,4 +12,6 @@ public interface UserRepository
     UserEntity findByUserId(String userId);
 
     void deleteByUserId(String userId);
+
+    UserEntity findByEmailVerificationToken(String token);
 }

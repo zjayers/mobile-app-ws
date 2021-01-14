@@ -5,6 +5,8 @@ import io.ayers.mobileappws.services.AddressService;
 import io.ayers.mobileappws.services.UserService;
 import io.ayers.mobileappws.shared.AddressDto;
 import io.ayers.mobileappws.shared.UserDto;
+import io.ayers.mobileappws.ui.model.request.PasswordResetModel;
+import io.ayers.mobileappws.ui.model.request.PasswordResetRequestModel;
 import io.ayers.mobileappws.ui.model.request.UserDetailsRequestModel;
 import io.ayers.mobileappws.ui.model.response.AddressResponseModel;
 import io.ayers.mobileappws.ui.model.response.OperationStatusModel;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 @RestController
 @RequestMapping(
@@ -121,6 +124,20 @@ public class UsersController {
                         addressesLink, selfLink)));
     }
 
+    @GetMapping(path = "/email-verification")
+    public ResponseEntity<OperationStatusModel> verifyEmailToken(@RequestParam(value = "token") String token) {
+
+        boolean isVerified = userService.verifyEmailToken(token);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(OperationStatusModel.builder()
+                                                       .operationName("EMAIL VERIFICATION")
+                                                       .operationResult(isVerified
+                                                                        ? "SUCCESS"
+                                                                        : "FAILURE")
+                                                       .build());
+    }
+
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserDetailsResponseModel> createOne(@RequestBody UserDetailsRequestModel userDetailsRequestModel) {
 
@@ -131,6 +148,41 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(userDetailsResponseModel);
     }
+
+    @PostMapping(path = "/password-reset",
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<OperationStatusModel> passwordReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
+
+        boolean passwordResetEmailSent
+                = userService.requestPasswordReset(passwordResetRequestModel.getEmail());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(OperationStatusModel.builder()
+                                                       .operationName("REQUEST PASSWORD RESET")
+                                                       .operationResult(passwordResetEmailSent
+                                                                        ? "SUCCESS"
+                                                                        : "FAILURE")
+                                                       .build());
+    }
+
+    @PostMapping(path = "/do-password-reset",
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<OperationStatusModel> doPasswordReset(@RequestBody PasswordResetModel passwordResetModel) {
+
+        boolean passwordResetSuccessful
+                = userService.resetPassword(passwordResetModel.getToken(), passwordResetModel.getPassword());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(OperationStatusModel.builder()
+                                                       .operationName("PASSWORD RESET")
+                                                       .operationResult(passwordResetSuccessful
+                                                                        ? "SUCCESS"
+                                                                        : "FAILURE")
+                                                       .build());
+    }
+
 
     @PutMapping(path = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserDetailsResponseModel> updateOne(@PathVariable(name = "userId") String userId,

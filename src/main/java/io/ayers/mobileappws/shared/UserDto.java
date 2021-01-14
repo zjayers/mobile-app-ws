@@ -3,6 +3,7 @@ package io.ayers.mobileappws.shared;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,7 +24,7 @@ public class UserDto
     private String password;
     private String encryptedPassword;
     private String emailVerificationToken;
-    private List<AddressDto> addresses;
+    private List<AddressDto> addresses = new ArrayList<>();
 
     @Builder.Default
     private Boolean emailVerificationStatus = false;

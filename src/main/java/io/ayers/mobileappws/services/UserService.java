@@ -18,4 +18,10 @@ public interface UserService
     void deleteUser(String userId);
 
     Collection<UserDto> getUsers(int page, int limit);
+
+    boolean verifyEmailToken(String token);
+
+    boolean requestPasswordReset(String email);
+
+    boolean resetPassword(String token, String password);
 }
