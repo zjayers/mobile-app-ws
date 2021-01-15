@@ -125,7 +125,7 @@ public class UsersController {
     }
 
     @GetMapping(path = "/email-verification")
-    public ResponseEntity<OperationStatusResponseModel> verifyEmailToken(@RequestParam(value = "token") String token) {
+    public ResponseEntity<OperationStatusResponseModel> getEmailVerificationToken(@RequestParam(value = "token") String token) {
 
         boolean isVerified = userService.verifyEmailToken(token);
 
@@ -139,7 +139,7 @@ public class UsersController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<UserDetailsResponseModel> createOne(@RequestBody UserDetailsRequestModel userDetailsRequestModel) {
+    public ResponseEntity<UserDetailsResponseModel> createOneUser(@RequestBody UserDetailsRequestModel userDetailsRequestModel) {
 
         UserDto userDto = userMapper.requestModelToDto(userDetailsRequestModel);
         UserDto savedUserDto = userService.createUser(userDto);
@@ -152,7 +152,7 @@ public class UsersController {
     @PostMapping(path = "/password-reset",
             consumes = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<OperationStatusResponseModel> passwordReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
+    public ResponseEntity<OperationStatusResponseModel> resetPasswordRequest(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
 
         boolean passwordResetEmailSent
                 = userService.requestPasswordReset(passwordResetRequestModel.getEmail());
@@ -169,7 +169,7 @@ public class UsersController {
     @PostMapping(path = "/do-password-reset",
             consumes = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<OperationStatusResponseModel> doPasswordReset(@RequestBody PasswordResetModel passwordResetModel) {
+    public ResponseEntity<OperationStatusResponseModel> resetPassword(@RequestBody PasswordResetModel passwordResetModel) {
 
         boolean passwordResetSuccessful
                 = userService.resetPassword(passwordResetModel.getToken(), passwordResetModel.getPassword());
@@ -185,8 +185,8 @@ public class UsersController {
 
 
     @PutMapping(path = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<UserDetailsResponseModel> updateOne(@PathVariable(name = "userId") String userId,
-                                                              @RequestBody UserDetailsRequestModel userDetailsRequestModel) {
+    public ResponseEntity<UserDetailsResponseModel> updateOneUser(@PathVariable(name = "userId") String userId,
+                                                                  @RequestBody UserDetailsRequestModel userDetailsRequestModel) {
 
         UserDto userDto = userMapper.requestModelToDto(userDetailsRequestModel);
         UserDto updatedUserDto = userService.updateUser(userId, userDto);
@@ -197,7 +197,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<OperationStatusResponseModel> deleteOne(@PathVariable(name = "userId") String userId) {
+    public ResponseEntity<OperationStatusResponseModel> deleteOneUser(@PathVariable(name = "userId") String userId) {
 
         userService.deleteUser(userId);
 
