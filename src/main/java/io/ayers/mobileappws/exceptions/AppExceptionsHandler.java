@@ -1,5 +1,7 @@
 package io.ayers.mobileappws.exceptions;
 
+import io.ayers.mobileappws.constants.ErrorMessageConstants;
+import io.ayers.mobileappws.models.responses.ErrorMessageResponseModel;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +14,12 @@ import java.util.Date;
 public class AppExceptionsHandler {
 
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
-    public ResponseEntity<ErrorMessage> handlePropertyValueException() {
+    public ResponseEntity<ErrorMessageResponseModel> handlePropertyValueException() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                             .body(ErrorMessage.builder()
-                                               .message(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage())
-                                               .timestamp(new Date())
-                                               .build());
+                             .body(ErrorMessageResponseModel.builder()
+                                                            .message(ErrorMessageConstants.MISSING_REQUIRED_FIELD.getErrorMessage())
+                                                            .timestamp(new Date())
+                                                            .build());
     }
 
 //    @ExceptionHandler(value = {Exception.class})

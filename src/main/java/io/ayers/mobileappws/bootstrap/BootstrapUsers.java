@@ -1,9 +1,9 @@
 package io.ayers.mobileappws.bootstrap;
 
-import io.ayers.mobileappws.domain.AddressEntity;
-import io.ayers.mobileappws.domain.UserEntity;
-import io.ayers.mobileappws.repository.AddressRepository;
-import io.ayers.mobileappws.repository.UserRepository;
+import io.ayers.mobileappws.models.entities.AddressEntity;
+import io.ayers.mobileappws.models.entities.UserEntity;
+import io.ayers.mobileappws.repositories.AddressRepository;
+import io.ayers.mobileappws.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
