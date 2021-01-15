@@ -13,6 +13,8 @@ spring:
   # Active Profile
   profiles:
     active: prod
+  jpa:
+    show-sql: true
 
 server:
   servlet:

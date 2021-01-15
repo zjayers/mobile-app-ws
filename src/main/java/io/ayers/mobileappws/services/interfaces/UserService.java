@@ -17,7 +17,7 @@ public interface UserService
 
     void deleteUser(String userId);
 
-    Collection<UserDto> getUsers(int page, int limit);
+    Collection<UserDto> getUsers(int page, int limit, boolean confirmed);
 
     boolean verifyEmailToken(String token);
 

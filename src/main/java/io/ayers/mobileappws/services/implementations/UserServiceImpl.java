@@ -42,6 +42,7 @@ public class UserServiceImpl
 
         String userDtoEmail = userDto.getEmail();
         UserEntity existingUserEntity = userRepository.findByEmail(userDtoEmail);
+
         if (existingUserEntity != null) throw new RuntimeException("User already exists with email: " + userDtoEmail);
 
         UserEntity userEntity = userMapper.dtoToDomainEntity(userDto);
@@ -66,6 +67,9 @@ public class UserServiceImpl
     @Override
     public UserDto getUserDetailsByEmail(String email) {
         UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) throw new UsernameNotFoundException(email);
+
         return userMapper.domainEntityToDto(userEntity);
     }
 
@@ -104,8 +108,14 @@ public class UserServiceImpl
     }
 
     @Override
-    public Collection<UserDto> getUsers(int page, int limit) {
-        Page<UserEntity> userEntities = userRepository.findAll(PageRequest.of(page, limit));
+    public Collection<UserDto> getUsers(int page, int limit, boolean confirmed) {
+
+        PageRequest pageRequest = PageRequest.of(page, limit);
+
+        Page<UserEntity> userEntities = confirmed
+                                        ? userRepository.findAllUsersWithConfirmedEmailAddress(pageRequest)
+                                        : userRepository.findAll(pageRequest);
+
         return userMapper.domainEntityToDto(userEntities.getContent());
     }
 

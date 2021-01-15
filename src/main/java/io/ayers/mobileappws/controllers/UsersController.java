@@ -42,11 +42,11 @@ public class UsersController {
     @GetMapping
     public ResponseEntity<Collection<UserDetailsResponseModel>> getAll(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "limit", defaultValue = "25") int limit) {
+            @RequestParam(value = "limit", defaultValue = "25") int limit,
+            @RequestParam(value = "confirmed", defaultValue = "false") boolean confirmed) {
 
-        Collection<UserDto> userDtos = userService.getUsers(page, limit);
+        Collection<UserDto> userDtos = userService.getUsers(page, limit, confirmed);
         Collection<UserDetailsResponseModel> userDetailsResponseModels = userMapper.dtoToResponseModel(userDtos);
-
         return ResponseEntity.status(HttpStatus.OK)
                              .body(userDetailsResponseModels);
     }
