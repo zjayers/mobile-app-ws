@@ -12,7 +12,7 @@ spring:
 
   # Active Profile
   profiles:
-    active: prod
+    active: dev
   jpa:
     show-sql: true
 

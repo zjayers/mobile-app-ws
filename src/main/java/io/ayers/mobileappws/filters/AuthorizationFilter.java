@@ -1,6 +1,9 @@
 package io.ayers.mobileappws.filters;
 
 import io.ayers.mobileappws.constants.SecurityConstants;
+import io.ayers.mobileappws.models.entities.UserEntity;
+import io.ayers.mobileappws.repositories.UserRepository;
+import io.ayers.mobileappws.security.UserPrincipal;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,13 +15,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class AuthorizationFilter
         extends BasicAuthenticationFilter {
 
-    public AuthorizationFilter(AuthenticationManager authenticationManager) {
+    private final UserRepository userRepository;
+
+    public AuthorizationFilter(AuthenticationManager authenticationManager,
+                               UserRepository userRepository) {
         super(authenticationManager);
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -47,8 +53,11 @@ public class AuthorizationFilter
                                .getBody()
                                .getSubject();
 
-        return userEmail != null
-               ? new UsernamePasswordAuthenticationToken(userEmail, null, new ArrayList<>())
-               : null;
+        if (userEmail == null) return null;
+
+        UserEntity userEntity = userRepository.findByEmail(userEmail);
+        UserPrincipal userPrincipal = new UserPrincipal(userEntity);
+
+        return new UsernamePasswordAuthenticationToken(userEmail, null, userPrincipal.getAuthorities());
     }
 }

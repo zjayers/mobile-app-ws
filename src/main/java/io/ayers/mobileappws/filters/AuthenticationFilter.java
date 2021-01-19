@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ayers.mobileappws.constants.SecurityConstants;
 import io.ayers.mobileappws.models.dtos.UserDto;
 import io.ayers.mobileappws.models.requests.UserLoginRequestModel;
+import io.ayers.mobileappws.security.UserPrincipal;
 import io.ayers.mobileappws.services.interfaces.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -56,7 +56,7 @@ public class AuthenticationFilter
                                             FilterChain chain,
                                             Authentication authResult) {
 
-        String email = ((User) authResult.getPrincipal()).getUsername();
+        String email = ((UserPrincipal) authResult.getPrincipal()).getUsername();
 
         String token = Jwts.builder()
                            .setSubject(email)

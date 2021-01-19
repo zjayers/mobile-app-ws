@@ -3,6 +3,7 @@ package io.ayers.mobileappws.config;
 import io.ayers.mobileappws.constants.SecurityConstants;
 import io.ayers.mobileappws.filters.AuthenticationFilter;
 import io.ayers.mobileappws.filters.AuthorizationFilter;
+import io.ayers.mobileappws.repositories.UserRepository;
 import io.ayers.mobileappws.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,7 @@ public class WebSecurityConfig
 
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -51,12 +53,15 @@ public class WebSecurityConfig
         http.csrf().disable();
 
         http.addFilter(getAuthenticationFilter());
-        http.addFilter(new AuthorizationFilter(authenticationManager()));
+        http.addFilter(new AuthorizationFilter(authenticationManager(), userRepository));
 
         http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.DO_PASSWORD_RESET_URL).permitAll();
+
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN");
+
         http.authorizeRequests().anyRequest().authenticated();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

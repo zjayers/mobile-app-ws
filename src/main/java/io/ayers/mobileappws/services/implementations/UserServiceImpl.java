@@ -7,6 +7,7 @@ import io.ayers.mobileappws.models.entities.UserEntity;
 import io.ayers.mobileappws.models.mappings.UserMapper;
 import io.ayers.mobileappws.repositories.PasswordResetTokenRepository;
 import io.ayers.mobileappws.repositories.UserRepository;
+import io.ayers.mobileappws.security.UserPrincipal;
 import io.ayers.mobileappws.services.interfaces.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,13 +15,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
@@ -195,14 +194,7 @@ public class UserServiceImpl
 
         if (userEntity == null) throw new UsernameNotFoundException(email);
 
-        return new User(
-                userEntity.getEmail(),
-                userEntity.getEncryptedPassword(),
-                userEntity.getEmailVerificationStatus(),
-                true,
-                true,
-                true,
-                new ArrayList<>());
+        return new UserPrincipal(userEntity);
 
     }
 
