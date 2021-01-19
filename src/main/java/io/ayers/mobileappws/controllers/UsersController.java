@@ -19,6 +19,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -52,6 +53,7 @@ public class UsersController {
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize(value = "(hasRole('USER') and #userId == principal.userId) or hasRole('ADMIN')")
     public ResponseEntity<UserDetailsResponseModel> getOne(@PathVariable(name = "userId") String userId) {
 
         UserDto userDto = userService.getUserDetailsByUserId(userId);
@@ -184,6 +186,7 @@ public class UsersController {
     }
 
 
+    @PreAuthorize(value = "(hasRole('USER') and #userId == principal.userId) or hasRole('ADMIN')")
     @PutMapping(path = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserDetailsResponseModel> updateOneUser(@PathVariable(name = "userId") String userId,
                                                                   @RequestBody UserDetailsRequestModel userDetailsRequestModel) {
@@ -197,6 +200,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/{userId}")
+    @PreAuthorize(value = "(hasRole('USER') and #userId == principal.userId) or hasRole('ADMIN')")
     public ResponseEntity<OperationStatusResponseModel> deleteOneUser(@PathVariable(name = "userId") String userId) {
 
         userService.deleteUser(userId);

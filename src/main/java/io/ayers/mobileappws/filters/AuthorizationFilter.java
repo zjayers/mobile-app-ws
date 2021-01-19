@@ -56,8 +56,11 @@ public class AuthorizationFilter
         if (userEmail == null) return null;
 
         UserEntity userEntity = userRepository.findByEmail(userEmail);
+
+        if (userEntity == null) return null;
+
         UserPrincipal userPrincipal = new UserPrincipal(userEntity);
 
-        return new UsernamePasswordAuthenticationToken(userEmail, null, userPrincipal.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
     }
 }
